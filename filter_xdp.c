@@ -1,11 +1,11 @@
 /*
-    UDP drop XDP program
+    UDP filter XDP program
 
-    Reflects IPv4 UDP packets sent to port 40000 back to sender.
+    Drops IPv4 UDP packets sent to port 40000 that don't pass the packet filter.
 
     USAGE:
 
-        clang -Ilibbpf/src -g -O2 -target bpf -c drop_xdp.c -o drop_xdp.o
+        clang -Ilibbpf/src -g -O2 -target bpf -c filter_xdp.c -o filter_xdp.o
         sudo cat /sys/kernel/debug/tracing/trace_pipe
 */
 
@@ -40,7 +40,7 @@
 #define debug_printf(...) do { } while (0)
 #endif // #if DEBUG
 
-SEC("drop_xdp") int drop_xdp_filter( struct xdp_md *ctx ) 
+SEC("filter_xdp") int filter_xdp_filter( struct xdp_md *ctx ) 
 { 
     void * data = (void*) (long) ctx->data; 
 
